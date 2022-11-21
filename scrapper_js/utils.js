@@ -116,18 +116,31 @@ const getDates = (type, period) => {
     if(!period || period.length === 0){
       return { startDate: '', endDate: '', endDateIsPresent: false }
     }
-    const [startDate, end] = period.split('-');
+    var [startDate, end] = period.split('-');
+    var startDate, end;
+    if (period !== undefined) {
+      [startDate, end] = period.split('-');
+    }
+    var endDate, duration;
+
+    if (end !== undefined) {
+      [ endDate, duration] = end.split('·');
+    }
   
-    const [ endDate, duration] = end.split('·');
   
     return { startDate, endDate, endDateIsPresent: end && end.includes('momento') }
   }else if(type === 'education'){
     if(!period || period.length === 0){
       return { startDate: '', endDate: '', }
     }
-    const [startDate, end] = period.split('-');
-  
-    const [ endDate, duration] = end.split('·');
+    var startDate, end
+    if (period !== undefined) {
+      [startDate, end] = period.split('-');
+    }
+
+    if (end !== undefined) {
+      [ endDate, duration] = end.split('·');
+    }
   
     return { startDate, endDate }
   }
