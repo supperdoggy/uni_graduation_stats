@@ -15,6 +15,7 @@ type IMongoDB interface {
 
 	// Companies
 	ListCompanies(ctx context.Context) ([]rest.ListCompanies, error)
+	ListCompaniesTopUniversities(ctx context.Context, company string) ([]rest.ListCompaniesTopUniversities, error)
 }
 
 type mongodb struct {

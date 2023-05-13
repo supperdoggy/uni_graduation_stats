@@ -12,6 +12,7 @@ type IHandlers interface {
 
 	// Companies
 	ListCompanies(c *gin.Context)
+	ListCompaniesTopUniversities(c *gin.Context)
 }
 
 type handlers struct {

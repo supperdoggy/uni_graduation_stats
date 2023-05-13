@@ -16,3 +16,13 @@ func (s *service) ListCompanies(ctx context.Context) ([]rest.ListCompanies, erro
 
 	return companies, nil
 }
+
+func (s *service) ListCompaniesTopUniversities(ctx context.Context, company string) ([]rest.ListCompaniesTopUniversities, error) {
+	companies, err := s.db.ListCompaniesTopUniversities(ctx, company)
+	if err != nil {
+		s.log.Error("error while getting companies", zap.Error(err))
+		return nil, err
+	}
+
+	return companies, nil
+}

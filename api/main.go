@@ -35,9 +35,12 @@ func main() {
 
 	apiv1 := r.Group("/api/v1")
 	{
+		// Universities
 		apiv1.GET("/list_universities", hndls.ListUniversities)
 
+		// Companies
 		apiv1.GET("/list_companies", hndls.ListCompanies)
+		apiv1.POST("/list_companies_top_universities", hndls.ListCompaniesTopUniversities)
 	}
 
 	if err := r.Run(fmt.Sprintf(":%s", config.Port)); err != nil {
