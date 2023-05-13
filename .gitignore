@@ -1,5 +1,5 @@
 tmp
-scrapper_js/.env
-scrapper_js/node_modules
-scrapper_js/ublock-chromium
-scrapper_js/ublock-data
+linkedin/scrapper_js/.env
+linkedin/scrapper_js/node_modules
+linkedin/scrapper_js/ublock-chromium
+linkedin/scrapper_js/ublock-data
