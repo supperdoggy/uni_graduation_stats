@@ -2,7 +2,9 @@ package storage
 
 import (
 	"context"
+	"sync"
 
+	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/db"
 	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/rest"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -10,12 +12,40 @@ import (
 )
 
 type IMongoDB interface {
+
+	// Users
+	CreateUser(ctx context.Context, email, fullname string, password []byte) (*db.User, error)
+	DeleteUser(ctx context.Context, id string) error
+	UpdateUser(ctx context.Context, id, email string, password []byte) error
+	GetUser(ctx context.Context, id string) (*db.User, error)
+	GetUserByEmail(ctx context.Context, email string) (*db.User, error)
+
+	// auth
+	NewToken(ctx context.Context, userID string) (string, error)
+	CheckToken(ctx context.Context, token string) (bool, string)
+
+	// email codes
+	NewEmailCode(ctx context.Context, email, code string) error
+	CheckEmailCode(ctx context.Context, email, code string) (bool, error)
+
 	// Education
 	ListSchools(ctx context.Context) ([]rest.ListUniversitiesSchools, error)
 
 	// Companies
 	ListCompanies(ctx context.Context) ([]rest.ListCompanies, error)
 	ListCompaniesTopUniversities(ctx context.Context, company string) ([]rest.ListCompaniesTopUniversities, error)
+}
+
+type obj map[string]interface{}
+
+type tokenCache struct {
+	m   map[string]db.Token
+	mut sync.Mutex
+}
+
+type emailCodeCache struct {
+	m   map[string]db.EmailCode
+	mut sync.Mutex
 }
 
 type mongodb struct {
@@ -26,7 +56,11 @@ type mongodb struct {
 	client *mongo.Client
 
 	// collections
-	users *mongo.Collection
+	students *mongo.Collection
+	users    *mongo.Collection
+
+	cache          tokenCache
+	emailCodeCache emailCodeCache
 
 	// The logger
 	log *zap.Logger

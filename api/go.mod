@@ -5,8 +5,11 @@ go 1.20
 require (
 	github.com/caarlos0/env v3.5.0+incompatible
 	github.com/gin-gonic/gin v1.9.0
+	github.com/google/uuid v1.3.0
 	go.mongodb.org/mongo-driver v1.11.6
 	go.uber.org/zap v1.24.0
+	golang.org/x/crypto v0.5.0
+	gopkg.in/night-codes/types.v1 v1.2.1
 )
 
 require (
@@ -37,7 +40,6 @@ require (
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	golang.org/x/arch v0.0.0-20210923205945-b76863e36670 // indirect
-	golang.org/x/crypto v0.5.0 // indirect
 	golang.org/x/net v0.7.0 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/sys v0.5.0 // indirect

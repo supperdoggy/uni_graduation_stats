@@ -33,7 +33,26 @@ func main() {
 
 	r := gin.Default()
 
+	// auth
+	auth := r.Group("/auth")
+	auth.POST("/register", hndls.Register)
+	auth.POST("/login", hndls.Login)
+	auth.POST("/check_token", hndls.CheckToken)
+	auth.POST("/new_email_code", hndls.NewEmailCode)
+	auth.POST("/check_email_code", hndls.CheckEmailCode)
+
+	// users
+	apiUser := r.Group("/user")
+	apiUser.Use(hndls.Middleware)
+	{
+		apiUser.POST("/create", hndls.CreateUser)
+		apiUser.DELETE("/delete", hndls.DeleteUser)
+		apiUser.PATCH("/update", hndls.UpdateUser)
+		apiUser.GET("/get/:id", hndls.GetUser)
+	}
+
 	apiv1 := r.Group("/api/v1")
+	apiv1.Use(hndls.Middleware)
 	{
 		// Universities
 		apiv1.GET("/list_universities", hndls.ListUniversities)

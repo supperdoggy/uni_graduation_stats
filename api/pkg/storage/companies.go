@@ -43,7 +43,7 @@ func (db *mongodb) ListCompanies(ctx context.Context) ([]rest.ListCompanies, err
 		},
 	}
 
-	cur, err := db.users.Aggregate(ctx, pipeline, options.Aggregate().SetAllowDiskUse(true))
+	cur, err := db.students.Aggregate(ctx, pipeline, options.Aggregate().SetAllowDiskUse(true))
 	if err != nil {
 		db.log.Error("error aggregating companies", zap.Error(err))
 		return nil, err
@@ -75,10 +75,13 @@ func (db *mongodb) ListCompaniesTopUniversities(ctx context.Context, company str
 			"count": 1,
 		},
 	}
+	sortStage := bson.M{
+		"$sort": bson.M{"count": -1},
+	}
 
-	pipeline := []bson.M{matchStage, unwindStage, groupStage, projectStage}
+	pipeline := []bson.M{matchStage, unwindStage, groupStage, projectStage, sortStage}
 
-	cur, err := db.users.Aggregate(ctx, pipeline, options.Aggregate().SetAllowDiskUse(true))
+	cur, err := db.students.Aggregate(ctx, pipeline, options.Aggregate().SetAllowDiskUse(true))
 	if err != nil {
 		db.log.Error("error aggregating companies", zap.Error(err))
 		return nil, err

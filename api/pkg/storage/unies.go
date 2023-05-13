@@ -24,7 +24,7 @@ func (db *mongodb) ListSchools(ctx context.Context) ([]rest.ListUniversitiesScho
 		}},
 	}
 
-	cur, err := db.users.Aggregate(ctx, pipeline, options.Aggregate().SetAllowDiskUse(true))
+	cur, err := db.students.Aggregate(ctx, pipeline, options.Aggregate().SetAllowDiskUse(true))
 	if err != nil {
 		db.log.Error("error aggregating schools", zap.Error(err))
 		return nil, err
