@@ -7,7 +7,11 @@ import (
 )
 
 type IHandlers interface {
+	// Universities
 	ListUniversities(c *gin.Context)
+
+	// Companies
+	ListCompanies(c *gin.Context)
 }
 
 type handlers struct {

@@ -9,7 +9,11 @@ import (
 )
 
 type IService interface {
+	// Universities
 	ListSchools(ctx context.Context) ([]rest.ListUniversitiesSchools, error)
+
+	// Companies
+	ListCompanies(ctx context.Context) ([]rest.ListCompanies, error)
 }
 
 type service struct {

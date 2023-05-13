@@ -10,7 +10,11 @@ import (
 )
 
 type IMongoDB interface {
+	// Education
 	ListSchools(ctx context.Context) ([]rest.ListUniversitiesSchools, error)
+
+	// Companies
+	ListCompanies(ctx context.Context) ([]rest.ListCompanies, error)
 }
 
 type mongodb struct {
