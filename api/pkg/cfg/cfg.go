@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/caarlos0/env"
+	validation "github.com/go-ozzo/ozzo-validation"
+	"github.com/go-ozzo/ozzo-validation/is"
 )
 
 type Config struct {
@@ -11,6 +13,9 @@ type Config struct {
 	Port string `env:"PORT"`
 	// The database connection string
 	MongoDB string `env:"MONGODB"`
+
+	// EmailCheckService is the URL of the email check service
+	EmailCheckService string `env:"EMAIL_CHECK_SERVICE"`
 }
 
 // NewConfig returns a new Config struct
@@ -20,9 +25,14 @@ func NewConfig() *Config {
 		panic(fmt.Sprintf("Cant parse env vars: %+v", err))
 	}
 
-	if cfg.MongoDB == "" || cfg.Port == "" {
-		panic("Missing required env vars")
+	if err := ValidateConfig(cfg); err != nil {
+		panic(fmt.Sprintf("Invalid config: %+v", err))
 	}
 
 	return &cfg
+}
+
+func ValidateConfig(c Config) error {
+	return validation.ValidateStruct(&c, validation.Field(&c.Port, validation.Required),
+		validation.Field(&c.MongoDB, validation.Required), validation.Field(&c.EmailCheckService, validation.Required, is.URL))
 }

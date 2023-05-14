@@ -5,13 +5,15 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/rest"
+	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/utils"
 	"go.uber.org/zap"
 )
 
 func (h *handlers) CreateUser(c *gin.Context) {
 	var (
-		req  models.CreateUserRequest
-		resp models.CreateUserResponse
+		req  rest.CreateUserRequest
+		resp rest.CreateUserResponse
 		ctx  context.Context
 	)
 	if err := c.Bind(&req); err != nil {
@@ -21,7 +23,7 @@ func (h *handlers) CreateUser(c *gin.Context) {
 		return
 	}
 
-	user, err := h.service.CreateUser(ctx, req.Password, req.Email, req.FullName)
+	user, err := h.svc.CreateUser(ctx, req.Password, req.Email, req.FullName)
 	if err != nil {
 		h.log.Error("error CreateUser", zap.Error(err))
 		resp.Error = err.Error()
@@ -33,10 +35,10 @@ func (h *handlers) CreateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-func (h *handler) DeleteUser(c *gin.Context) {
+func (h *handlers) DeleteUser(c *gin.Context) {
 	var (
-		req  models.DeleteUserRequest
-		resp models.DeleteUserResponse
+		req  rest.DeleteUserRequest
+		resp rest.DeleteUserResponse
 		ctx  context.Context
 		err  error
 	)
@@ -49,7 +51,7 @@ func (h *handler) DeleteUser(c *gin.Context) {
 
 	h.log.Info("DeleteUser", zap.Any("req", req))
 
-	id, err := h.service.DeleteUser(ctx, req.ID)
+	id, err := h.svc.DeleteUser(ctx, req.ID)
 	if err != nil {
 		h.log.Error("error deleting user", zap.Error(err), zap.Any("req", req))
 		resp.Error = err.Error()
@@ -61,10 +63,10 @@ func (h *handler) DeleteUser(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-func (h *handler) UpdateUser(c *gin.Context) {
+func (h *handlers) UpdateUser(c *gin.Context) {
 	var (
-		req  models.UpdateUserRequest
-		resp models.UpdateUserResponse
+		req  rest.UpdateUserRequest
+		resp rest.UpdateUserResponse
 		ctx  context.Context
 		err  error
 	)
@@ -75,7 +77,7 @@ func (h *handler) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	user, err := h.service.UpdateUser(ctx, req.ID, req.Password, req.Email)
+	user, err := h.svc.UpdateUser(ctx, req.ID, req.Password, req.Email)
 	if err != nil {
 		h.log.Error("error UpdateUser", zap.Error(err), zap.Any("id", req.ID))
 		resp.Error = err.Error()
@@ -87,15 +89,15 @@ func (h *handler) UpdateUser(c *gin.Context) {
 	c.JSON(http.StatusBadRequest, resp)
 }
 
-func (h *handler) GetUser(c *gin.Context) {
+func (h *handlers) GetUser(c *gin.Context) {
 	var (
-		resp models.GetUserResponse
+		resp rest.GetUserResponse
 		ctx  context.Context
 		err  error
 	)
 	userID := c.Param("id")
 
-	user, err := h.service.GetUser(ctx, userID)
+	user, err := h.svc.GetUser(ctx, userID)
 	if err != nil {
 		h.log.Error("error GetUser", zap.Error(err), zap.Any("id", userID))
 		resp.Error = err.Error()

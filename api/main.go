@@ -6,9 +6,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/cfg"
+	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/clients/email"
+	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/clients/storage"
 	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/handlers"
 	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/service"
-	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/storage"
 	"go.uber.org/zap"
 )
 
@@ -28,7 +29,8 @@ func main() {
 		logger.Fatal("error initializing mongodb", zap.Error(err))
 	}
 
-	srv := service.NewService(db, logger)
+	emailClient := email.NewClient(*logger, config.EmailCheckService)
+	srv := service.NewService(db, logger, emailClient)
 	hndls := handlers.NewHandlers(srv, logger)
 
 	r := gin.Default()

@@ -3,12 +3,31 @@ package service
 import (
 	"context"
 
+	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/clients/email"
+	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/clients/storage"
+	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/db"
 	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/rest"
-	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/storage"
 	"go.uber.org/zap"
 )
 
 type IService interface {
+
+	// user
+	CreateUser(ctx context.Context, password, email, fullName string) (*db.User, error)
+	DeleteUser(ctx context.Context, id string) (*string, error)
+	UpdateUser(ctx context.Context, id, password, email string) (*db.User, error)
+	GetUser(ctx context.Context, id string) (*db.User, error)
+
+	// auth
+	NewToken(ctx context.Context, userID string) (token string, err error)
+	CheckToken(ctx context.Context, token string) (userID string, err error)
+	Login(ctx context.Context, email, password string) (userID, token string, err error)
+	Register(ctx context.Context, email, fullName, password string) (userID, token string, err error)
+
+	// email validation
+	NewEmailCode(ctx context.Context, email string) error
+	CheckEmailCode(ctx context.Context, email, code string) error
+
 	// Universities
 	ListSchools(ctx context.Context) ([]rest.ListUniversitiesSchools, error)
 
@@ -23,9 +42,11 @@ type service struct {
 
 	// logger
 	log *zap.Logger
+
+	emailClient email.IEmailClient
 }
 
-func NewService(db storage.IMongoDB, log *zap.Logger) IService {
+func NewService(db storage.IMongoDB, log *zap.Logger, e email.IEmailClient) IService {
 	return &service{
 		db:  db,
 		log: log,
