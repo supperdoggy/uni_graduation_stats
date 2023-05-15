@@ -74,9 +74,12 @@ func NewMongoDB(ctx context.Context, connStr string, log *zap.Logger) (IMongoDB,
 	}
 
 	return &mongodb{
-		connStr: connStr,
-		client:  client,
-		log:     log,
-		users:   client.Database("stud").Collection("users"),
+		connStr:  connStr,
+		client:   client,
+		log:      log,
+		users:    client.Database("stud").Collection("creds"),
+		students: client.Database("stud").Collection("users"),
+
+		cache: tokenCache{m: make(map[string]db.Token)},
 	}, nil
 }
