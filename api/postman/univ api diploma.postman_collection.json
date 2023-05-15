@@ -1,0 +1,406 @@
+{
+	"info": {
+		"_postman_id": "b5e65d1a-5ee9-4a54-af8a-1ee207c47465",
+		"name": "univ api diploma",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25030567",
+		"_collection_link": "https://nurofy.postman.co/workspace/test~6bb87d22-5e0b-4a6d-becb-72f854be4daa/collection/25030567-b5e65d1a-5ee9-4a54-af8a-1ee207c47465?action=share&creator=25030567&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "unies",
+			"item": [
+				{
+					"name": "list schools",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/list_universities",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"list_universities"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "companies",
+			"item": [
+				{
+					"name": "list companies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/list_companies",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"list_companies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "top uni by company",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"company\": \"GlobalLogic\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/list_companies_top_universities",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"list_companies_top_universities"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"token21233213@mail.com\",\n    \"first_name\": \"Maksym\",\n    \"last_name\": \"Marchyshak\",\n    \"password\": \"randomPass123123213@\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domen}}/api/v1/auth/register",
+							"host": [
+								"{{domen}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"dc71751ec017e9dda19b44cf8314914d\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domen}}/api/v1/auth/check_token",
+							"host": [
+								"{{domen}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"check_token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"token4@mail.com\",\n    \"password\": \"randomPass123123213@\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domen}}/api/v1/auth/login",
+							"host": [
+								"{{domen}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "email check",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://evservice.azurewebsites.net/Email?email=supperspggy229%40gmail.com",
+							"protocol": "https",
+							"host": [
+								"evservice",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"Email"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "supperspggy229%40gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "new email code",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"supperspggy229@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domen}}/api/v1/auth/new_email_code",
+							"host": [
+								"{{domen}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"new_email_code"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "validate email code",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"supperspggy229@gmail.com\",\n    \"code\": \"SSVDBFGZ\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domen}}/api/v1/auth/check_email_code",
+							"host": [
+								"{{domen}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"check_email_code"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{Authorization}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test2@mail.com\",\n    \"password\": \"admin@asdxz123\",\n    \"full_name\": \"maksym marchyshak\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domen}}/api/v1/user/create",
+							"host": [
+								"{{domen}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{Authorization}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"feecb126-7ebf-4d6e-b608-d0b15bf9261c\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domen}}/api/v1/user/delete",
+							"host": [
+								"{{domen}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{Authorization}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"05acfdb7-a2d7-4ba3-8a68-58777088d029\",\n    \"email\": \"random@mail.com\",\n    \"password\": \"Ssdz@1sdSzc123v\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domen}}/api/v1/user/update",
+							"host": [
+								"{{domen}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{Authorization}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domen}}/api/v1/user/get/78430d4b-c41e-45b4-9a25-6b17a6c1e445",
+							"host": [
+								"{{domen}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"get",
+								"78430d4b-c41e-45b4-9a25-6b17a6c1e445"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
