@@ -31,37 +31,46 @@ func main() {
 
 	emailClient := email.NewClient(*logger, config.EmailCheckService)
 	srv := service.NewService(db, logger, emailClient)
-	hndls := handlers.NewHandlers(srv, logger)
+	hndls := handlers.NewHandlers(srv, logger, config.AuthorizationEnabled)
 
 	r := gin.Default()
 
 	// auth
 	auth := r.Group("/auth")
-	auth.POST("/register", hndls.Register)
-	auth.POST("/login", hndls.Login)
-	auth.POST("/check_token", hndls.CheckToken)
-	auth.POST("/new_email_code", hndls.NewEmailCode)
-	auth.POST("/check_email_code", hndls.CheckEmailCode)
-
-	// users
-	apiUser := r.Group("/user")
-	apiUser.Use(hndls.Middleware)
 	{
-		apiUser.POST("/create", hndls.CreateUser)
-		apiUser.DELETE("/delete", hndls.DeleteUser)
-		apiUser.PATCH("/update", hndls.UpdateUser)
-		apiUser.GET("/get/:id", hndls.GetUser)
+		auth.POST("/register", hndls.Register)
+		auth.POST("/login", hndls.Login)
+		auth.POST("/check_token", hndls.CheckToken)
+		auth.POST("/new_email_code", hndls.NewEmailCode)
+		auth.POST("/check_email_code", hndls.CheckEmailCode)
 	}
 
+	// api
 	apiv1 := r.Group("/api/v1")
-	apiv1.Use(hndls.Middleware)
-	{
-		// Universities
-		apiv1.GET("/list_universities", hndls.ListUniversities)
 
-		// Companies
-		apiv1.GET("/list_companies", hndls.ListCompanies)
-		apiv1.POST("/list_companies_top_universities", hndls.ListCompaniesTopUniversities)
+	users := apiv1.Group("/users")
+	users.Use(hndls.Middleware)
+	{
+		users.POST("/create", hndls.CreateUser)
+		users.DELETE("/delete", hndls.DeleteUser)
+		users.PATCH("/update", hndls.UpdateUser)
+		users.GET("/get/:id", hndls.GetUser)
+	}
+
+	// Schools
+	schools := apiv1.Group("/schools")
+	schools.Use(hndls.Middleware)
+	{
+		schools.GET("/list", hndls.ListSchools)
+		schools.POST("/top_companies", hndls.ListSchoolsTopCompanies)
+	}
+
+	// Companies
+	companies := apiv1.Group("/companies")
+	companies.Use(hndls.Middleware)
+	{
+		companies.GET("/list", hndls.ListCompanies)
+		companies.POST("/top_schools", hndls.ListCompaniesTopSchools)
 	}
 
 	if err := r.Run(fmt.Sprintf(":%s", config.Port)); err != nil {

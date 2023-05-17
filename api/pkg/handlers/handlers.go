@@ -23,25 +23,30 @@ type IHandlers interface {
 	NewEmailCode(c *gin.Context)
 	CheckEmailCode(c *gin.Context)
 
-	// Universities
-	ListUniversities(c *gin.Context)
+	// Schools
+	ListSchools(c *gin.Context)
+	ListSchoolsTopCompanies(c *gin.Context)
 
 	// Companies
 	ListCompanies(c *gin.Context)
-	ListCompaniesTopUniversities(c *gin.Context)
+	ListCompaniesTopSchools(c *gin.Context)
 }
 
 type handlers struct {
 	// service interface
 	svc service.IService
 
+	// auth
+	authEnabled bool
+
 	// logger
 	log *zap.Logger
 }
 
-func NewHandlers(svc service.IService, log *zap.Logger) IHandlers {
+func NewHandlers(svc service.IService, log *zap.Logger, authEnabled bool) IHandlers {
 	return &handlers{
-		svc: svc,
-		log: log,
+		svc:         svc,
+		log:         log,
+		authEnabled: authEnabled,
 	}
 }

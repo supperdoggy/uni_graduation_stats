@@ -64,6 +64,11 @@ func (h *handlers) CheckToken(c *gin.Context) {
 }
 
 func (h *handlers) Middleware(c *gin.Context) {
+	if !h.authEnabled {
+		c.Next()
+		return
+	}
+
 	// read from the header the token
 	token := c.GetHeader("Authorization")
 	if token == "" {

@@ -28,12 +28,13 @@ type IService interface {
 	NewEmailCode(ctx context.Context, email string) error
 	CheckEmailCode(ctx context.Context, email, code string) error
 
-	// Universities
-	ListSchools(ctx context.Context) ([]rest.ListUniversitiesSchools, error)
+	// Schools
+	ListSchools(ctx context.Context) ([]rest.ListSchools, error)
+	ListSchoolsTopCompanies(ctx context.Context, school string) ([]rest.ListSchoolsTopCompanies, error)
 
 	// Companies
 	ListCompanies(ctx context.Context) ([]rest.ListCompanies, error)
-	ListCompaniesTopUniversities(ctx context.Context, company string) ([]rest.ListCompaniesTopUniversities, error)
+	ListCompaniesTopSchools(ctx context.Context, company string) ([]rest.ListCompaniesTopSchools, error)
 }
 
 type service struct {

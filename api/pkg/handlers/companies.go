@@ -24,9 +24,9 @@ func (h *handlers) ListCompanies(c *gin.Context) {
 	})
 }
 
-func (h *handlers) ListCompaniesTopUniversities(c *gin.Context) {
-	var req rest.ListCompaniesTopUniversitiesRequest
-	var resp rest.ListCompaniesTopUniversitiesResponse
+func (h *handlers) ListCompaniesTopSchools(c *gin.Context) {
+	var req rest.ListCompaniesTopSchoolsRequest
+	var resp rest.ListCompaniesTopSchoolsResponse
 
 	if err := c.Bind(&req); err != nil {
 		h.log.Error("failed to bind request", zap.Error(err))
@@ -42,16 +42,16 @@ func (h *handlers) ListCompaniesTopUniversities(c *gin.Context) {
 		return
 	}
 
-	schools, err := h.svc.ListCompaniesTopUniversities(c.Request.Context(), req.Company)
+	schools, err := h.svc.ListCompaniesTopSchools(c.Request.Context(), req.Company)
 	if err != nil {
 		h.log.Error("failed to get companies", zap.Error(err))
-		c.JSON(http.StatusInternalServerError, rest.ListCompaniesTopUniversitiesResponse{
+		c.JSON(http.StatusInternalServerError, rest.ListCompaniesTopSchoolsResponse{
 			Error: err.Error(),
 		})
 		return
 	}
 
-	resp.Universities = schools
+	resp.Schools = schools
 	resp.Count = len(schools)
 
 	c.JSON(http.StatusOK, resp)

@@ -16,6 +16,9 @@ type Config struct {
 
 	// EmailCheckService is the URL of the email check service
 	EmailCheckService string `env:"EMAIL_CHECK_SERVICE"`
+
+	// AuthorizationEnabled is a flag that enables authorization
+	AuthorizationEnabled bool `env:"AUTHORIZATION_ENABLED"`
 }
 
 // NewConfig returns a new Config struct

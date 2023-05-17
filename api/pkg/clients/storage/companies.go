@@ -58,7 +58,7 @@ func (db *mongodb) ListCompanies(ctx context.Context) ([]rest.ListCompanies, err
 	return companies, nil
 }
 
-func (db *mongodb) ListCompaniesTopUniversities(ctx context.Context, company string) ([]rest.ListCompaniesTopUniversities, error) {
+func (db *mongodb) ListCompaniesTopSchools(ctx context.Context, company string) ([]rest.ListCompaniesTopSchools, error) {
 	regex := primitive.Regex{Pattern: company, Options: ""}
 	matchStage := bson.M{"$match": bson.M{"experiences.company": bson.M{"$regex": regex}}}
 
@@ -87,7 +87,7 @@ func (db *mongodb) ListCompaniesTopUniversities(ctx context.Context, company str
 		return nil, err
 	}
 
-	var schools []rest.ListCompaniesTopUniversities
+	var schools []rest.ListCompaniesTopSchools
 	if err := cur.All(ctx, &schools); err != nil {
 		db.log.Error("error getting companies", zap.Error(err))
 		return nil, err

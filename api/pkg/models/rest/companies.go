@@ -11,17 +11,17 @@ type ListCompaniesResponse struct {
 	Error     string          `json:"error,omitempty"`
 }
 
-type ListCompaniesTopUniversitiesRequest struct {
+type ListCompaniesTopSchoolsRequest struct {
 	Company string `json:"company"`
 }
 
-type ListCompaniesTopUniversities struct {
+type ListCompaniesTopSchools struct {
 	Name  string `bson:"_id" json:"name"`
 	Count int    `bson:"count" json:"count"`
 }
 
-type ListCompaniesTopUniversitiesResponse struct {
-	Universities []ListCompaniesTopUniversities `json:"universities,omitempty"`
-	Count        int                            `json:"count,omitempty"`
-	Error        string                         `json:"error,omitempty"`
+type ListCompaniesTopSchoolsResponse struct {
+	Schools []ListCompaniesTopSchools `json:"schools,omitempty"`
+	Count   int                       `json:"count,omitempty"`
+	Error   string                    `json:"error,omitempty"`
 }

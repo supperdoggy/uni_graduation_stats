@@ -29,11 +29,12 @@ type IMongoDB interface {
 	CheckEmailCode(ctx context.Context, email, code string) (bool, error)
 
 	// Education
-	ListSchools(ctx context.Context) ([]rest.ListUniversitiesSchools, error)
+	ListSchools(ctx context.Context) ([]rest.ListSchools, error)
+	ListSchoolsTopCompanies(ctx context.Context, school string) ([]rest.ListSchoolsTopCompanies, error)
 
 	// Companies
 	ListCompanies(ctx context.Context) ([]rest.ListCompanies, error)
-	ListCompaniesTopUniversities(ctx context.Context, company string) ([]rest.ListCompaniesTopUniversities, error)
+	ListCompaniesTopSchools(ctx context.Context, company string) ([]rest.ListCompaniesTopSchools, error)
 }
 
 type obj map[string]interface{}
