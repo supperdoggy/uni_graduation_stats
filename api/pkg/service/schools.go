@@ -26,3 +26,13 @@ func (s *service) ListSchoolsTopCompanies(ctx context.Context, school string) ([
 
 	return l, nil
 }
+
+func (s *service) ListJobsBySchool(ctx context.Context, school string) ([]rest.ListJobsBySchool, error) {
+	l, err := s.db.ListJobsBySchool(ctx, school)
+	if err != nil {
+		s.log.Error("error while getting schools", zap.Error(err))
+		return nil, err
+	}
+
+	return l, nil
+}

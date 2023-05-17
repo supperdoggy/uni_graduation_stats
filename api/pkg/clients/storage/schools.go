@@ -96,3 +96,48 @@ func (db mongodb) ListSchoolsTopCompanies(ctx context.Context, school string) ([
 
 	return schools, nil
 }
+
+func (db mongodb) ListJobsBySchool(ctx context.Context, school string) ([]rest.ListJobsBySchool, error) {
+	pipeline := []bson.M{
+		{
+			"$match": bson.M{
+				"education.schoolName": school,
+			},
+		},
+		{
+			"$unwind": "$experiences",
+		},
+		{
+			"$group": bson.M{
+				"_id":   "$experiences.title",
+				"count": bson.M{"$sum": 1},
+			},
+		},
+		{
+			"$project": bson.M{
+				"_id":   0,
+				"title": "$_id",
+				"count": 1,
+			},
+		},
+		{
+			"$sort": bson.M{
+				"count": -1,
+			},
+		},
+	}
+
+	cur, err := db.students.Aggregate(ctx, pipeline, options.Aggregate().SetAllowDiskUse(true))
+	if err != nil {
+		db.log.Error("error aggregating schools", zap.Error(err))
+		return nil, err
+	}
+
+	var jobs []rest.ListJobsBySchool
+	if err := cur.All(ctx, &jobs); err != nil {
+		db.log.Error("error getting schools", zap.Error(err))
+		return nil, err
+	}
+
+	return jobs, nil
+}

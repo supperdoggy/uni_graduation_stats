@@ -25,3 +25,18 @@ type ListSchoolsTopCompaniesResponse struct {
 	Count     int                       `json:"count,omitempty"`
 	Error     string                    `json:"error,omitempty"`
 }
+
+type ListJobsBySchoolRequest struct {
+	School string `json:"school"`
+}
+
+type ListJobsBySchool struct {
+	Title string `bson:"title" json:"title"`
+	Count int    `bson:"count" json:"count"`
+}
+
+type ListJobsBySchoolResponse struct {
+	Jobs  []ListJobsBySchool `json:"jobs,omitempty"`
+	Count int                `json:"count,omitempty"`
+	Error string             `json:"error,omitempty"`
+}

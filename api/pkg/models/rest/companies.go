@@ -15,9 +15,15 @@ type ListCompaniesTopSchoolsRequest struct {
 	Company string `json:"company"`
 }
 
-type ListCompaniesTopSchools struct {
-	Name  string `bson:"_id" json:"name"`
+type ListDegrees struct {
+	Name  string `bson:"degreeName" json:"name"`
 	Count int    `bson:"count" json:"count"`
+}
+
+type ListCompaniesTopSchools struct {
+	Name    string        `bson:"_id" json:"name"`
+	Count   int           `bson:"count" json:"count"`
+	Degrees []ListDegrees `bson:"degrees" json:"degrees"`
 }
 
 type ListCompaniesTopSchoolsResponse struct {

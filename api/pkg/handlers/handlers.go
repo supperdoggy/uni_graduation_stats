@@ -26,6 +26,7 @@ type IHandlers interface {
 	// Schools
 	ListSchools(c *gin.Context)
 	ListSchoolsTopCompanies(c *gin.Context)
+	ListJobTitlesBySchool(c *gin.Context)
 
 	// Companies
 	ListCompanies(c *gin.Context)

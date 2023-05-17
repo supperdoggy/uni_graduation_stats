@@ -46,3 +46,31 @@ func (h *handlers) ListSchoolsTopCompanies(c *gin.Context) {
 	resp.Count = len(companies)
 	c.JSON(200, resp)
 }
+
+func (h *handlers) ListJobTitlesBySchool(c *gin.Context) {
+	var req rest.ListJobsBySchoolRequest
+	var resp rest.ListJobsBySchoolResponse
+
+	if err := c.Bind(&req); err != nil {
+		resp.Error = err.Error()
+		c.JSON(400, resp)
+		return
+	}
+
+	if req.School == "" {
+		resp.Error = "school is empty"
+		c.JSON(400, resp)
+		return
+	}
+
+	jobs, err := h.svc.ListJobsBySchool(c.Request.Context(), req.School)
+	if err != nil {
+		resp.Error = err.Error()
+		c.JSON(500, resp)
+		return
+	}
+
+	resp.Jobs = jobs
+	resp.Count = len(jobs)
+	c.JSON(200, resp)
+}

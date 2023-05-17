@@ -31,6 +31,7 @@ type IMongoDB interface {
 	// Education
 	ListSchools(ctx context.Context) ([]rest.ListSchools, error)
 	ListSchoolsTopCompanies(ctx context.Context, school string) ([]rest.ListSchoolsTopCompanies, error)
+	ListJobsBySchool(ctx context.Context, school string) ([]rest.ListJobsBySchool, error)
 
 	// Companies
 	ListCompanies(ctx context.Context) ([]rest.ListCompanies, error)

@@ -63,6 +63,7 @@ func main() {
 	{
 		schools.GET("/list", hndls.ListSchools)
 		schools.POST("/top_companies", hndls.ListSchoolsTopCompanies)
+		schools.POST("/job_titles", hndls.ListJobTitlesBySchool)
 	}
 
 	// Companies
