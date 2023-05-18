@@ -28,6 +28,7 @@ type IHandlers interface {
 	ListSchoolsTopCompanies(c *gin.Context)
 	ListJobTitlesBySchool(c *gin.Context)
 	CorrelationBetweenDegreeAndTitle(c *gin.Context)
+	SchoolDegrees(c *gin.Context)
 
 	// Companies
 	ListCompanies(c *gin.Context)

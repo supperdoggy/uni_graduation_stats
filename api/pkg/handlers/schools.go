@@ -103,3 +103,31 @@ func (h *handlers) CorrelationBetweenDegreeAndTitle(c *gin.Context) {
 
 	c.JSON(200, resp)
 }
+
+func (h *handlers) SchoolDegrees(c *gin.Context) {
+	var req rest.SchoolDegreesRequest
+	var resp rest.SchoolDegreesResponse
+
+	if err := c.Bind(&req); err != nil {
+		resp.Error = err.Error()
+		c.JSON(400, resp)
+		return
+	}
+
+	if req.School == "" {
+		resp.Error = "school is empty"
+		c.JSON(400, resp)
+		return
+	}
+
+	degrees, err := h.svc.DegreesBySchool(c.Request.Context(), req.School)
+	if err != nil {
+		resp.Error = err.Error()
+		c.JSON(500, resp)
+		return
+	}
+
+	resp.Degrees = degrees
+	resp.Count = len(degrees)
+	c.JSON(200, resp)
+}

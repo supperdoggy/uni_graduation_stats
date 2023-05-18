@@ -65,6 +65,7 @@ func main() {
 		schools.POST("/top_companies", hndls.ListSchoolsTopCompanies)
 		schools.POST("/job_titles", hndls.ListJobTitlesBySchool)
 		schools.POST("/correlation_between_degree_title", hndls.CorrelationBetweenDegreeAndTitle)
+		schools.POST("/degrees", hndls.SchoolDegrees)
 	}
 
 	// Companies

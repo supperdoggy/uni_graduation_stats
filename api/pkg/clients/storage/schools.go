@@ -204,5 +204,62 @@ func (db *mongodb) CorrelationBetweenDegreeAndTitle(ctx context.Context, school 
 	}
 
 	return degreeTitles, nil
+}
 
+func (db *mongodb) SchoolDegrees(ctx context.Context, school string) ([]rest.SchoolDegrees, error) {
+	pipeline := []bson.M{
+		bson.M{
+			"$match": bson.M{
+				"education.schoolName": primitive.Regex{Pattern: school, Options: "i"},
+			},
+		},
+		bson.M{"$unwind": "$education"},
+		bson.M{
+			"$match": bson.M{
+				"education.schoolName": primitive.Regex{Pattern: school, Options: "i"},
+			},
+		},
+		bson.M{
+			"$group": bson.M{
+				"_id": bson.M{
+					"schoolName": "$education.schoolName",
+					"degreeName": "$education.degreeName",
+				},
+				"count": bson.M{"$sum": 1},
+			},
+		},
+		bson.M{
+			"$project": bson.M{
+				"_id":        0,
+				"schoolName": "$_id.schoolName",
+				"degreeName": "$_id.degreeName",
+				"count":      1,
+			},
+		},
+		bson.M{
+			"$sort": bson.M{
+				"count": -1,
+			},
+		},
+	}
+
+	cur, err := db.students.Aggregate(ctx, pipeline, options.Aggregate().SetAllowDiskUse(true))
+	if err != nil {
+		db.log.Error("error aggregating degrees", zap.Error(err))
+		return nil, err
+	}
+
+	var degrees []rest.SchoolDegrees
+	if err := cur.All(ctx, &degrees); err != nil {
+		db.log.Error("error getting degrees", zap.Error(err))
+		return nil, err
+	}
+
+	for k, v := range degrees {
+		if v.Degree == "" {
+			degrees[k].Degree = "no data"
+		}
+	}
+
+	return degrees, nil
 }

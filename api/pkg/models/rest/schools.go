@@ -62,3 +62,19 @@ type CorrelationDegreeAndTitleResponse struct {
 	Count        int                         `json:"count,omitempty"`
 	Error        string                      `json:"error,omitempty"`
 }
+
+type SchoolDegreesRequest struct {
+	School string `json:"school"`
+}
+
+type SchoolDegrees struct {
+	Degree     string `bson:"degreeName" json:"degree"`
+	SchoolName string `bson:"schoolName" json:"schoolName"`
+	Count      int    `bson:"count" json:"count"`
+}
+
+type SchoolDegreesResponse struct {
+	Degrees []SchoolDegrees `json:"degrees,omitempty"`
+	Count   int             `json:"count,omitempty"`
+	Error   string          `json:"error,omitempty"`
+}

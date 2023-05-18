@@ -33,6 +33,7 @@ type IMongoDB interface {
 	ListSchoolsTopCompanies(ctx context.Context, school string) ([]rest.ListSchoolsTopCompanies, error)
 	ListJobsBySchool(ctx context.Context, school string) ([]rest.ListJobsBySchool, error)
 	CorrelationBetweenDegreeAndTitle(ctx context.Context, school string) ([]rest.CorrelationDegreeAndTitle, error)
+	SchoolDegrees(ctx context.Context, school string) ([]rest.SchoolDegrees, error)
 
 	// Companies
 	ListCompanies(ctx context.Context) ([]rest.ListCompanies, error)

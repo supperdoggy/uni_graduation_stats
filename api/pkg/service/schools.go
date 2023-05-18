@@ -46,3 +46,13 @@ func (s *service) CorrelationBetweenDegreeAndTitle(ctx context.Context, school s
 
 	return l, nil
 }
+
+func (s *service) DegreesBySchool(ctx context.Context, school string) ([]rest.SchoolDegrees, error) {
+	l, err := s.db.SchoolDegrees(ctx, school)
+	if err != nil {
+		s.log.Error("error while getting schools", zap.Error(err))
+		return nil, err
+	}
+
+	return l, nil
+}
