@@ -18,11 +18,21 @@ func (s *service) ListCompanies(ctx context.Context) ([]rest.ListCompanies, erro
 }
 
 func (s *service) ListCompaniesTopSchools(ctx context.Context, company string) ([]rest.ListCompaniesTopSchools, error) {
-	companies, err := s.db.ListCompaniesTopSchools(ctx, company)
+	schools, err := s.db.ListCompaniesTopSchools(ctx, company)
 	if err != nil {
-		s.log.Error("error while getting companies", zap.Error(err))
+		s.log.Error("error while getting schools", zap.Error(err))
 		return nil, err
 	}
 
-	return companies, nil
+	return schools, nil
+}
+
+func (s *service) TopHiredDegreesByCompany(ctx context.Context, company, school string) ([]rest.TopHiredDegrees, error) {
+	degrees, err := s.db.TopHiredDegreesByCompany(ctx, company, school)
+	if err != nil {
+		s.log.Error("error while getting degrees", zap.Error(err))
+		return nil, err
+	}
+
+	return degrees, nil
 }

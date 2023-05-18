@@ -32,10 +32,12 @@ type IService interface {
 	ListSchools(ctx context.Context) ([]rest.ListSchools, error)
 	ListSchoolsTopCompanies(ctx context.Context, school string) ([]rest.ListSchoolsTopCompanies, error)
 	ListJobsBySchool(ctx context.Context, school string) ([]rest.ListJobsBySchool, error)
+	CorrelationBetweenDegreeAndTitle(ctx context.Context, school string) ([]rest.CorrelationDegreeAndTitle, error)
 
 	// Companies
 	ListCompanies(ctx context.Context) ([]rest.ListCompanies, error)
 	ListCompaniesTopSchools(ctx context.Context, company string) ([]rest.ListCompaniesTopSchools, error)
+	TopHiredDegreesByCompany(ctx context.Context, company, school string) ([]rest.TopHiredDegrees, error)
 }
 
 type service struct {

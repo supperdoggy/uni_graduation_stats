@@ -21,7 +21,7 @@ type ListSchoolsTopCompanies struct {
 }
 
 type ListSchoolsTopCompaniesResponse struct {
-	Companies []ListSchoolsTopCompanies `json:"school,omitempty"`
+	Companies []ListSchoolsTopCompanies `json:"companies,omitempty"`
 	Count     int                       `json:"count,omitempty"`
 	Error     string                    `json:"error,omitempty"`
 }
@@ -39,4 +39,26 @@ type ListJobsBySchoolResponse struct {
 	Jobs  []ListJobsBySchool `json:"jobs,omitempty"`
 	Count int                `json:"count,omitempty"`
 	Error string             `json:"error,omitempty"`
+}
+
+type CorrelationDegreeAndTitleRequest struct {
+	School string `json:"school"`
+}
+
+type CorreelationExperience struct {
+	Company   string `bson:"company" json:"company"`
+	Title     string `bson:"title" json:"title"`
+	StartDate string `bson:"startDate" json:"startDate"`
+	EndDate   string `bson:"endDate" json:"endDate"`
+}
+
+type CorrelationDegreeAndTitle struct {
+	Degree     string                   `bson:"degreeName" json:"degree"`
+	Experience []CorreelationExperience `bson:"experience" json:"experience"`
+}
+
+type CorrelationDegreeAndTitleResponse struct {
+	Correlations []CorrelationDegreeAndTitle `json:"correlations,omitempty"`
+	Count        int                         `json:"count,omitempty"`
+	Error        string                      `json:"error,omitempty"`
 }

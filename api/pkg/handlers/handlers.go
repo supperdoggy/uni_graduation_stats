@@ -27,10 +27,12 @@ type IHandlers interface {
 	ListSchools(c *gin.Context)
 	ListSchoolsTopCompanies(c *gin.Context)
 	ListJobTitlesBySchool(c *gin.Context)
+	CorrelationBetweenDegreeAndTitle(c *gin.Context)
 
 	// Companies
 	ListCompanies(c *gin.Context)
 	ListCompaniesTopSchools(c *gin.Context)
+	TopHiredDegrees(c *gin.Context)
 }
 
 type handlers struct {

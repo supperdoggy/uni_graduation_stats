@@ -64,6 +64,7 @@ func main() {
 		schools.GET("/list", hndls.ListSchools)
 		schools.POST("/top_companies", hndls.ListSchoolsTopCompanies)
 		schools.POST("/job_titles", hndls.ListJobTitlesBySchool)
+		schools.POST("/correlation_between_degree_title", hndls.CorrelationBetweenDegreeAndTitle)
 	}
 
 	// Companies
@@ -72,6 +73,7 @@ func main() {
 	{
 		companies.GET("/list", hndls.ListCompanies)
 		companies.POST("/top_schools", hndls.ListCompaniesTopSchools)
+		companies.POST("/top_degrees_hired", hndls.TopHiredDegrees)
 	}
 
 	if err := r.Run(fmt.Sprintf(":%s", config.Port)); err != nil {

@@ -5,6 +5,7 @@ import (
 
 	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/rest"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.uber.org/zap"
 )
@@ -139,4 +140,64 @@ func (db *mongodb) ListCompaniesTopSchools(ctx context.Context, company string) 
 	}
 
 	return schools, nil
+}
+
+func (db *mongodb) TopHiredDegreesByCompany(ctx context.Context, company, school string) ([]rest.TopHiredDegrees, error) {
+	pipeline := mongo.Pipeline{
+		bson.D{
+			{"$match", bson.D{
+				{"education.schoolName", school},
+				{"experiences.company", bson.D{
+					{"$regex", company},
+					{"$options", "i"},
+				}},
+			}},
+		},
+		bson.D{{"$unwind", "$education"}},
+		bson.D{
+			{"$match", bson.D{
+				{"education.schoolName", school},
+			}},
+		},
+		bson.D{
+			{"$group", bson.D{
+				{"_id", bson.D{
+					{"degreeName", "$education.degreeName"},
+					{"startDate", "$education.startDate"},
+					{"endDate", "$education.endDate"},
+				}},
+				{"count", bson.D{
+					{"$sum", 1},
+				}},
+			}},
+		},
+		bson.D{
+			{"$project", bson.D{
+				{"_id", 0},
+				{"schoolName", "$_id.schoolName"},
+				{"degreeName", "$_id.degreeName"},
+				{"startDate", "$_id.startDate"},
+				{"endDate", "$_id.endDate"},
+				{"count", 1},
+			}},
+		},
+		bson.D{
+			{"$sort", bson.D{
+				{"count", -1},
+			}},
+		},
+	}
+	cur, err := db.students.Aggregate(ctx, pipeline, options.Aggregate().SetAllowDiskUse(true))
+	if err != nil {
+		db.log.Error("error aggregating companies", zap.Error(err))
+		return nil, err
+	}
+
+	var degrees []rest.TopHiredDegrees
+	if err := cur.All(ctx, &degrees); err != nil {
+		db.log.Error("error getting degrees", zap.Error(err))
+		return nil, err
+	}
+
+	return degrees, nil
 }

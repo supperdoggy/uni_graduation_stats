@@ -74,3 +74,32 @@ func (h *handlers) ListJobTitlesBySchool(c *gin.Context) {
 	resp.Count = len(jobs)
 	c.JSON(200, resp)
 }
+
+func (h *handlers) CorrelationBetweenDegreeAndTitle(c *gin.Context) {
+	var req rest.CorrelationDegreeAndTitleRequest
+	var resp rest.CorrelationDegreeAndTitleResponse
+
+	if err := c.Bind(&req); err != nil {
+		resp.Error = err.Error()
+		c.JSON(400, resp)
+		return
+	}
+
+	if req.School == "" {
+		resp.Error = "school is empty"
+		c.JSON(400, resp)
+		return
+	}
+
+	correlation, err := h.svc.CorrelationBetweenDegreeAndTitle(c.Request.Context(), req.School)
+	if err != nil {
+		resp.Error = err.Error()
+		c.JSON(500, resp)
+		return
+	}
+
+	resp.Correlations = correlation
+	resp.Count = len(correlation)
+
+	c.JSON(200, resp)
+}

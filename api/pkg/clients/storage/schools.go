@@ -5,6 +5,7 @@ import (
 
 	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/rest"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.uber.org/zap"
 )
@@ -39,7 +40,7 @@ func (db *mongodb) ListSchools(ctx context.Context) ([]rest.ListSchools, error) 
 	return schools, nil
 }
 
-func (db mongodb) ListSchoolsTopCompanies(ctx context.Context, school string) ([]rest.ListSchoolsTopCompanies, error) {
+func (db *mongodb) ListSchoolsTopCompanies(ctx context.Context, school string) ([]rest.ListSchoolsTopCompanies, error) {
 	pipeline := []bson.M{
 		{
 			"$match": bson.M{
@@ -97,7 +98,7 @@ func (db mongodb) ListSchoolsTopCompanies(ctx context.Context, school string) ([
 	return schools, nil
 }
 
-func (db mongodb) ListJobsBySchool(ctx context.Context, school string) ([]rest.ListJobsBySchool, error) {
+func (db *mongodb) ListJobsBySchool(ctx context.Context, school string) ([]rest.ListJobsBySchool, error) {
 	pipeline := []bson.M{
 		{
 			"$match": bson.M{
@@ -140,4 +141,68 @@ func (db mongodb) ListJobsBySchool(ctx context.Context, school string) ([]rest.L
 	}
 
 	return jobs, nil
+}
+
+func (db *mongodb) CorrelationBetweenDegreeAndTitle(ctx context.Context, school string) ([]rest.CorrelationDegreeAndTitle, error) {
+	pipeline := bson.A{
+		bson.D{
+			{"$match", bson.D{
+				{"education.schoolName", bson.D{
+					{"$regex", primitive.Regex{Pattern: school, Options: "i"}},
+				}},
+			}},
+		},
+		bson.D{
+			{"$unwind", "$education"},
+		},
+		bson.D{
+			{"$match", bson.D{
+				{"education.schoolName", bson.D{
+					{"$regex", primitive.Regex{Pattern: school, Options: "i"}},
+				}},
+			}},
+		},
+		bson.D{
+			{"$project", bson.D{
+				{"_id", 0},
+				{"degreeName", "$education.degreeName"},
+				{"experience", bson.D{
+					{"$map", bson.D{
+						{"input", "$experiences"},
+						{"as", "exp"},
+						{"in", bson.D{
+							{"company", bson.D{
+								{"$arrayElemAt", bson.A{
+									bson.D{
+										{"$split", bson.A{
+											"$$exp.company", " · ",
+										}},
+									},
+									0,
+								}},
+							}},
+							{"title", "$$exp.title"},
+							{"startDate", "$$exp.startDate"},
+							{"endDate", "$$exp.endDate"},
+						}},
+					}},
+				}},
+			}},
+		},
+	}
+
+	cur, err := db.students.Aggregate(ctx, pipeline, options.Aggregate().SetAllowDiskUse(true))
+	if err != nil {
+		db.log.Error("error aggregating schools", zap.Error(err))
+		return nil, err
+	}
+
+	var degreeTitles []rest.CorrelationDegreeAndTitle
+	if err := cur.All(ctx, &degreeTitles); err != nil {
+		db.log.Error("error getting schools", zap.Error(err))
+		return nil, err
+	}
+
+	return degreeTitles, nil
+
 }
