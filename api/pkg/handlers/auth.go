@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
-	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/rest"
+	"github.com/supperdoggy/diploma_university_statistics_tool/models/rest"
 	"go.uber.org/zap"
 )
 

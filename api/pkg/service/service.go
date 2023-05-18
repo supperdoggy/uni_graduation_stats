@@ -5,8 +5,8 @@ import (
 
 	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/clients/email"
 	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/clients/storage"
-	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/db"
-	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/rest"
+	"github.com/supperdoggy/diploma_university_statistics_tool/models/db"
+	"github.com/supperdoggy/diploma_university_statistics_tool/models/rest"
 	"go.uber.org/zap"
 )
 

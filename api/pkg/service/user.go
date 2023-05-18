@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/db"
 	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/utils"
+	"github.com/supperdoggy/diploma_university_statistics_tool/models/db"
 	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 )

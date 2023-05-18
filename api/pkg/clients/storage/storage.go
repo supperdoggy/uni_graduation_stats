@@ -4,8 +4,8 @@ import (
 	"context"
 	"sync"
 
-	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/db"
-	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/rest"
+	"github.com/supperdoggy/diploma_university_statistics_tool/models/db"
+	"github.com/supperdoggy/diploma_university_statistics_tool/models/rest"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.uber.org/zap"

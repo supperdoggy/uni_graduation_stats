@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/db"
+	"github.com/supperdoggy/diploma_university_statistics_tool/models/db"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )

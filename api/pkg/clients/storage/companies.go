@@ -3,7 +3,7 @@ package storage
 import (
 	"context"
 
-	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/rest"
+	"github.com/supperdoggy/diploma_university_statistics_tool/models/rest"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -59,7 +59,6 @@ func (db *mongodb) ListCompanies(ctx context.Context) ([]rest.ListCompanies, err
 }
 
 func (db *mongodb) ListCompaniesTopSchools(ctx context.Context, company string) ([]rest.ListCompaniesTopSchools, error) {
-
 	pipeline := bson.A{
 		bson.M{
 			"$match": bson.M{
@@ -146,7 +145,10 @@ func (db *mongodb) TopHiredDegreesByCompany(ctx context.Context, company, school
 	pipeline := mongo.Pipeline{
 		bson.D{
 			{"$match", bson.D{
-				{"education.schoolName", school},
+				{"education.schoolName", bson.D{
+					{"$regex", school},
+					{"$options", "i"},
+				}},
 				{"experiences.company", bson.D{
 					{"$regex", company},
 					{"$options", "i"},
@@ -156,12 +158,17 @@ func (db *mongodb) TopHiredDegreesByCompany(ctx context.Context, company, school
 		bson.D{{"$unwind", "$education"}},
 		bson.D{
 			{"$match", bson.D{
-				{"education.schoolName", school},
+				{"education.schoolName",
+					bson.D{
+						{"$regex", school},
+						{"$options", "i"},
+					}},
 			}},
 		},
 		bson.D{
 			{"$group", bson.D{
 				{"_id", bson.D{
+					{"company", "$experiences.company"},
 					{"degreeName", "$education.degreeName"},
 					{"startDate", "$education.startDate"},
 					{"endDate", "$education.endDate"},
@@ -174,6 +181,7 @@ func (db *mongodb) TopHiredDegreesByCompany(ctx context.Context, company, school
 		bson.D{
 			{"$project", bson.D{
 				{"_id", 0},
+				{"company", "$_id.company"},
 				{"schoolName", "$_id.schoolName"},
 				{"degreeName", "$_id.degreeName"},
 				{"startDate", "$_id.startDate"},

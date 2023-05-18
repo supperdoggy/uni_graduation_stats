@@ -5,8 +5,8 @@ import (
 
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
-	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/db"
-	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/rest"
+	"github.com/supperdoggy/diploma_university_statistics_tool/models/db"
+	"github.com/supperdoggy/diploma_university_statistics_tool/models/rest"
 	passwordvalidator "github.com/wagslane/go-password-validator"
 )
 

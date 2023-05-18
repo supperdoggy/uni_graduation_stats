@@ -4,15 +4,17 @@ go 1.20
 
 require (
 	github.com/caarlos0/env v3.5.0+incompatible
-	github.com/gin-gonic/gin v1.9.0
 	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
 	github.com/google/uuid v1.3.0
+	github.com/supperdoggy/diploma_university_statistics_tool/models v0.0.0-00010101000000-000000000000
 	github.com/wagslane/go-password-validator v0.3.0
 	go.mongodb.org/mongo-driver v1.11.6
 	go.uber.org/zap v1.24.0
 	golang.org/x/crypto v0.5.0
 	gopkg.in/night-codes/types.v1 v1.2.1
 )
+
+replace github.com/supperdoggy/diploma_university_statistics_tool/models => ../models
 
 require (
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
@@ -40,8 +42,6 @@ require (
 	github.com/xdg-go/scram v1.1.1 // indirect
 	github.com/xdg-go/stringprep v1.0.3 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d // indirect
-	go.uber.org/atomic v1.7.0 // indirect
-	go.uber.org/multierr v1.6.0 // indirect
 	golang.org/x/arch v0.0.0-20210923205945-b76863e36670 // indirect
 	golang.org/x/net v0.7.0 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
@@ -49,4 +49,10 @@ require (
 	golang.org/x/text v0.7.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+)
+
+require (
+	github.com/gin-gonic/gin v1.9.0
+	go.uber.org/atomic v1.7.0 // indirect
+	go.uber.org/multierr v1.6.0 // indirect
 )

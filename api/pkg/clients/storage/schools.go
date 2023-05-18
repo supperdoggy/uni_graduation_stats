@@ -3,9 +3,10 @@ package storage
 import (
 	"context"
 
-	"github.com/supperdoggy/diploma_university_statistics_tool/api/pkg/models/rest"
+	"github.com/supperdoggy/diploma_university_statistics_tool/models/rest"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.uber.org/zap"
 )
@@ -41,45 +42,59 @@ func (db *mongodb) ListSchools(ctx context.Context) ([]rest.ListSchools, error) 
 }
 
 func (db *mongodb) ListSchoolsTopCompanies(ctx context.Context, school string) ([]rest.ListSchoolsTopCompanies, error) {
-	pipeline := []bson.M{
-		{
-			"$match": bson.M{
-				"education.schoolName": school,
-			},
+	pipeline := mongo.Pipeline{
+		bson.D{
+			{"$match", bson.D{
+				{"education.schoolName", bson.D{
+					{"$regex", school},
+				}},
+			}},
 		},
-		{
-			"$unwind": "$experiences",
-		},
-		{
-			"$group": bson.M{
-				"_id": bson.M{
-					"$trim": bson.M{
-						"input": bson.M{
-							"$arrayElemAt": bson.A{
-								bson.M{
-									"$split": bson.A{
-										"$experiences.company",
-										"·",
+		bson.D{{"$unwind", "$experiences"}},
+		bson.D{
+			{"$group", bson.D{
+				{"_id", bson.D{
+					{"company", bson.D{
+						{"$trim", bson.D{
+							{"input", bson.D{
+								{"$arrayElemAt", bson.A{
+									bson.D{
+										{"$split", bson.A{
+											"$experiences.company",
+											" · ",
+										}},
 									},
-								},
-								0,
-							},
-						},
-					},
-				},
-				"count": bson.M{"$sum": 1},
-			},
+									0,
+								}},
+							}},
+							{"chars", " "},
+						}},
+					}},
+					{"user", "$_id"},
+				}},
+				{"count", bson.D{
+					{"$sum", 1},
+				}},
+			}},
 		},
-		{
-			"$project": bson.M{
-				"_id":   1,
-				"count": 1,
-			},
+		bson.D{
+			{"$group", bson.D{
+				{"_id", "$_id.company"},
+				{"count", bson.D{
+					{"$sum", 1},
+				}},
+			}},
 		},
-		{
-			"$sort": bson.M{
-				"count": -1,
-			},
+		bson.D{
+			{"$project", bson.D{
+				{"_id", 1},
+				{"count", 1},
+			}},
+		},
+		bson.D{
+			{"$sort", bson.D{
+				{"count", -1},
+			}},
 		},
 	}
 
@@ -102,7 +117,9 @@ func (db *mongodb) ListJobsBySchool(ctx context.Context, school string) ([]rest.
 	pipeline := []bson.M{
 		{
 			"$match": bson.M{
-				"education.schoolName": school,
+				"education.schoolName": bson.M{
+					"$regex": school,
+				},
 			},
 		},
 		{
