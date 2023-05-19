@@ -22,6 +22,7 @@ type IUniStats interface {
 	SchoolList() (*rest.ListSchoolsResponse, error)
 	TopCompanies(school string) (*rest.ListSchoolsTopCompaniesResponse, error)
 	TopHiredDegrees(school, company string) (*rest.TopHiredDegreesResponse, error)
+	SchoolDegrees(school string) (*rest.SchoolDegreesResponse, error)
 
 	TopSchools(company string) (*rest.ListCompaniesTopSchoolsResponse, error)
 }
@@ -122,6 +123,17 @@ func (u *uniStats) TopSchools(company string) (*rest.ListCompaniesTopSchoolsResp
 	var resp rest.ListCompaniesTopSchoolsResponse
 	if err := u.makeApiV1Req("/companies/top_schools", post,
 		rest.ListCompaniesTopSchoolsRequest{Company: company}, &resp); err != nil {
+		u.log.Error("Error while making request", zap.Error(err))
+		return nil, err
+	}
+
+	return &resp, nil
+}
+
+func (u *uniStats) SchoolDegrees(school string) (*rest.SchoolDegreesResponse, error) {
+	var resp rest.SchoolDegreesResponse
+	if err := u.makeApiV1Req("/schools/degrees", post,
+		rest.SchoolDegreesRequest{School: school}, &resp); err != nil {
 		u.log.Error("Error while making request", zap.Error(err))
 		return nil, err
 	}

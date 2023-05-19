@@ -10,6 +10,7 @@ type IService interface {
 	Schools() (*rest.ListSchoolsResponse, error)
 	TopCompanies(school string) (*rest.ListSchoolsTopCompaniesResponse, error)
 	TopHiredDegrees(school, company string) (*rest.TopHiredDegreesResponse, error)
+	SchoolDegrees(school string) (*rest.SchoolDegreesResponse, error)
 
 	TopSchoolsByCompany(company string) (*rest.ListCompaniesTopSchoolsResponse, error)
 }
@@ -64,4 +65,14 @@ func (s *service) TopSchoolsByCompany(company string) (*rest.ListCompaniesTopSch
 	}
 
 	return schools, nil
+}
+
+func (s *service) SchoolDegrees(school string) (*rest.SchoolDegreesResponse, error) {
+	degrees, err := s.api.SchoolDegrees(school)
+	if err != nil {
+		s.log.Error("Error while getting degrees", zap.Error(err))
+		return nil, err
+	}
+
+	return degrees, nil
 }
