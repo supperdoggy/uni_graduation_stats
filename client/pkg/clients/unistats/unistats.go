@@ -22,6 +22,8 @@ type IUniStats interface {
 	SchoolList() (*rest.ListSchoolsResponse, error)
 	TopCompanies(school string) (*rest.ListSchoolsTopCompaniesResponse, error)
 	TopHiredDegrees(school, company string) (*rest.TopHiredDegreesResponse, error)
+
+	TopSchools(company string) (*rest.ListCompaniesTopSchoolsResponse, error)
 }
 
 type uniStats struct {
@@ -111,6 +113,17 @@ func (u *uniStats) TopHiredDegrees(school, company string) (*rest.TopHiredDegree
 		if v.Name == "" {
 			resp.Degrees[k].Name = "no data"
 		}
+	}
+
+	return &resp, nil
+}
+
+func (u *uniStats) TopSchools(company string) (*rest.ListCompaniesTopSchoolsResponse, error) {
+	var resp rest.ListCompaniesTopSchoolsResponse
+	if err := u.makeApiV1Req("/companies/top_schools", post,
+		rest.ListCompaniesTopSchoolsRequest{Company: company}, &resp); err != nil {
+		u.log.Error("Error while making request", zap.Error(err))
+		return nil, err
 	}
 
 	return &resp, nil

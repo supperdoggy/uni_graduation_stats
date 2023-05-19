@@ -168,10 +168,7 @@ func (db *mongodb) TopHiredDegreesByCompany(ctx context.Context, company, school
 		bson.D{
 			{"$group", bson.D{
 				{"_id", bson.D{
-					{"company", "$experiences.company"},
 					{"degreeName", "$education.degreeName"},
-					{"startDate", "$education.startDate"},
-					{"endDate", "$education.endDate"},
 				}},
 				{"count", bson.D{
 					{"$sum", 1},
@@ -181,11 +178,8 @@ func (db *mongodb) TopHiredDegreesByCompany(ctx context.Context, company, school
 		bson.D{
 			{"$project", bson.D{
 				{"_id", 0},
-				{"company", "$_id.company"},
 				{"schoolName", "$_id.schoolName"},
 				{"degreeName", "$_id.degreeName"},
-				{"startDate", "$_id.startDate"},
-				{"endDate", "$_id.endDate"},
 				{"count", 1},
 			}},
 		},

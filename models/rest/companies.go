@@ -38,10 +38,8 @@ type TopHiredDegreesRequest struct {
 }
 
 type TopHiredDegrees struct {
-	Name      string `bson:"degreeName" json:"name"`
-	StartDate string `bson:"startDate" json:"startDate"`
-	EndDate   string `bson:"endDate" json:"endDate"`
-	Count     int    `bson:"count" json:"count"`
+	Name  string `bson:"degreeName" json:"name"`
+	Count int    `bson:"count" json:"count"`
 }
 
 type TopHiredDegreesResponse struct {

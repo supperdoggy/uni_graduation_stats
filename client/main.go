@@ -24,8 +24,9 @@ func main() {
 	h := handlers.NewHandler(log, srv, bot)
 
 	bot.Handle("/schools", h.Schools)
-	bot.Handle("/top_companies", h.TopCompanies)
+	bot.Handle("/top_companies_by_school", h.TopCompaniesBySchool)
 	bot.Handle("/top_hired_degrees", h.TopHiredDegrees)
+	bot.Handle("/top_schools_by_company", h.TopSchoolsByCompany)
 
 	if err != nil {
 		log.Fatal("Error while creating bot", zap.Error(err))

@@ -11,7 +11,9 @@ import (
 
 type IHandler interface {
 	Schools(m *telebot.Message)
-	TopCompanies(m *telebot.Message)
+	TopCompaniesBySchool(m *telebot.Message)
+	TopHiredDegrees(m *telebot.Message)
+	TopSchoolsByCompany(m *telebot.Message)
 }
 
 type handler struct {
@@ -20,7 +22,7 @@ type handler struct {
 	bot *telebot.Bot
 }
 
-func NewHandler(log *zap.Logger, srv service.IService, bot *telebot.Bot) *handler {
+func NewHandler(log *zap.Logger, srv service.IService, bot *telebot.Bot) IHandler {
 	return &handler{
 		log: log,
 		srv: srv,
@@ -52,9 +54,9 @@ func (h *handler) Schools(m *telebot.Message) {
 	}
 }
 
-func (h *handler) TopCompanies(m *telebot.Message) {
+func (h *handler) TopCompaniesBySchool(m *telebot.Message) {
 
-	msg := strings.Split(m.Text, "/top_companies ")
+	msg := strings.Split(m.Text, "/top_companies_by_school ")
 	if len(msg) < 2 {
 		h.log.Error("Error while getting school name")
 		return
@@ -130,6 +132,49 @@ func (h *handler) TopHiredDegrees(m *telebot.Message) {
 			break
 		}
 		text += fmt.Sprintf("%v: %s - %v employees\n", i+1, degree.Name, degree.Count)
+	}
+
+	_, err = h.bot.Reply(m, text)
+	if err != nil {
+		h.log.Error("Error while replying", zap.Error(err))
+		return
+	}
+
+}
+
+func (h *handler) TopSchoolsByCompany(m *telebot.Message) {
+	msg := strings.Split(m.Text, "/top_schools_by_company ")
+	if len(msg) < 2 {
+		h.log.Error("Error while getting school name")
+		return
+	}
+
+	company := msg[1]
+
+	resp, err := h.srv.TopSchoolsByCompany(company)
+	if err != nil {
+		h.log.Error("Error while getting schools", zap.Error(err))
+		return
+	}
+
+	if resp.Error != "" {
+		h.log.Error("Error while getting schools", zap.Error(err))
+		h.bot.Reply(m, resp.Error)
+		return
+	}
+
+	if len(resp.Schools) == 0 {
+		h.log.Error("No schools found")
+		h.bot.Reply(m, "No schools found")
+		return
+	}
+
+	var text string
+	for i, school := range resp.Schools {
+		if i > 30 {
+			break
+		}
+		text += fmt.Sprintf("%v: %s - %v employees\n", i+1, school.Name, school.Count)
 	}
 
 	_, err = h.bot.Reply(m, text)

@@ -10,6 +10,8 @@ type IService interface {
 	Schools() (*rest.ListSchoolsResponse, error)
 	TopCompanies(school string) (*rest.ListSchoolsTopCompaniesResponse, error)
 	TopHiredDegrees(school, company string) (*rest.TopHiredDegreesResponse, error)
+
+	TopSchoolsByCompany(company string) (*rest.ListCompaniesTopSchoolsResponse, error)
 }
 
 type service struct {
@@ -17,7 +19,7 @@ type service struct {
 	log *zap.Logger
 }
 
-func NewService(log *zap.Logger, api unistats.IUniStats) *service {
+func NewService(log *zap.Logger, api unistats.IUniStats) IService {
 	return &service{
 		api: api,
 		log: log,
@@ -52,4 +54,14 @@ func (s *service) TopHiredDegrees(school, company string) (*rest.TopHiredDegrees
 	}
 
 	return degrees, nil
+}
+
+func (s *service) TopSchoolsByCompany(company string) (*rest.ListCompaniesTopSchoolsResponse, error) {
+	schools, err := s.api.TopSchools(company)
+	if err != nil {
+		s.log.Error("Error while getting schools", zap.Error(err))
+		return nil, err
+	}
+
+	return schools, nil
 }
